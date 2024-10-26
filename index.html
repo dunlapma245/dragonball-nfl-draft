@@ -8,7 +8,12 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f8f8f8;
+            background-color: #e0f7fa; /* Light cyan background */
+            color: #333; /* Dark text color */
+            padding: 20px;
+        }
+        h1 {
+            color: #00796b; /* Teal color */
         }
         #teams {
             display: flex;
@@ -17,20 +22,50 @@
         }
         .team {
             margin: 10px;
+            padding: 20px;
+            border: 2px solid #00796b;
+            border-radius: 10px;
+            background-color: #ffffff; /* White background for teams */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 250px;
+        }
+        select {
             padding: 10px;
-            border: 1px solid #ddd;
-            width: 200px;
-            background-color: #fff;
+            font-size: 16px;
+            margin-top: 10px;
             border-radius: 5px;
+            border: 1px solid #00796b; /* Teal border for dropdown */
+            width: 100%;
         }
         button {
-            margin-top: 20px;
+            margin-top: 10px;
             padding: 10px 20px;
             font-size: 16px;
+            background-color: #00796b; /* Teal button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004d40; /* Darker teal on hover */
         }
         #character-log {
             margin-top: 20px;
             font-weight: bold;
+            color: #d32f2f; /* Red color for log messages */
+        }
+        ul {
+            list-style-type: none; /* Remove default list style */
+            padding: 0;
+            text-align: left; /* Align list items to the left */
+        }
+        li {
+            margin: 5px 0; /* Add space between list items */
+            padding: 5px;
+            border: 1px solid #00796b; /* Teal border for list items */
+            border-radius: 5px;
+            background-color: #b2dfdb; /* Light teal background for list items */
         }
     </style>
 </head>
@@ -106,4 +141,25 @@
         let availableCharacters = [...characters];
 
         // Populate dropdowns with characters
-      
+        function populateDropdowns() {
+            const teamSelects = [document.getElementById('team1-select'), 
+                                 document.getElementById('team2-select'), 
+                                 document.getElementById('team3-select')];
+            teamSelects.forEach(select => {
+                availableCharacters.forEach(character => {
+                    const option = document.createElement('option');
+                    option.value = character.name;
+                    option.textContent = `${character.name} (Power: ${character.power_level}, Ability: ${character.special_ability})`;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function draftCharacter(teamNumber) {
+            const select = document.getElementById(`team${teamNumber}-select`);
+            const selectedCharacterName = select.value;
+
+            // Find the selected character from the available list
+            const characterIndex = availableCharacters.findIndex(char => char.name === selectedCharacterName);
+            if (characterIndex === -1) {
+                document.getElementById("character-log").innerText =
